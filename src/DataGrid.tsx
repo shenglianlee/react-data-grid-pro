@@ -73,6 +73,7 @@ export interface DataGridHandle {
   scrollToColumn: (colIdx: number) => void;
   scrollToRow: (rowIdx: number) => void;
   selectCell: (position: Position, enableEditor?: Maybe<boolean>) => void;
+  clearSelectCell: () => void;
 }
 
 type SharedDivProps = Pick<
@@ -385,7 +386,8 @@ function DataGrid<R, SR, K extends Key>(
         behavior: 'smooth'
       });
     },
-    selectCell
+    selectCell,
+    clearSelectCell
   }));
 
   /**
@@ -707,6 +709,14 @@ function DataGrid<R, SR, K extends Key>(
       // TODO: replace with a #record? https://github.com/microsoft/TypeScript/issues/39831
       setSelectedPosition({ ...position, mode: 'SELECT' });
     }
+  }
+
+  /**
+   * Clear selected cell with initial value.
+   */
+  function clearSelectCell(): void {
+    setSelectedPosition(initialPosition);
+    setDraggedOverRowIdx(undefined);
   }
 
   function closeEditor() {
